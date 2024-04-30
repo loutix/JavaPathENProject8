@@ -18,6 +18,7 @@ import tripPricer.TripPricer;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -51,9 +52,9 @@ public class TourGuideService {
     }
 
     public VisitedLocation getUserLocation(User user) {
-        VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ? user.getLastVisitedLocation()
+        Object visitedLocation = (user.getVisitedLocations().size() > 0) ? user.getLastVisitedLocation()
                 : trackUserLocation(user);
-        return visitedLocation;
+        return (VisitedLocation) visitedLocation;
     }
 
     public User getUser(String userName) {
@@ -89,36 +90,37 @@ public class TourGuideService {
         return providers;
     }
 
-    public VisitedLocation trackUserLocation(User user) {
-        VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
-        user.addToVisitedLocations(visitedLocation);
-        rewardsService.calculateRewards(user);
-        return visitedLocation;
+    public CompletableFuture<VisitedLocation> trackUserLocation(User user) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
+            user.addToVisitedLocations(visitedLocation);
+            rewardsService.calculateRewards(user);
+            return visitedLocation;
+        });
     }
 
 
     public List<closestAttraction> getNearByAttractions(VisitedLocation visitedLocation) {
 
-        List<Attraction> attractionSorted = gpsUtil.getAttractions();
-
-        if (attractionSorted.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        attractionSorted.stream()
+        List<Attraction> attractionSorted = gpsUtil.getAttractions()
+                .stream()
                 .sorted(Comparator.comparingDouble(attraction -> rewardsService.getDistance(attraction, visitedLocation.location)))
                 .limit(5)
                 .toList();
 
-        return attractionSorted
-                .stream()
-                .map(attraction -> new closestAttraction(
-                        attraction.attractionName,
-                        new Location(attraction.latitude, attraction.longitude),
-                        visitedLocation.location,
-                        rewardsService.getDistance(attraction, visitedLocation.location),
-                        rewardsService.getRewardPoints(attraction, visitedLocation.userId)
-                )).toList();
+        List<closestAttraction> closestAttractionList =
+                attractionSorted
+                        .stream()
+                        .map(attraction -> new closestAttraction(
+                                attraction.attractionName,
+                                new Location(attraction.latitude, attraction.longitude),
+                                visitedLocation.location,
+                                rewardsService.getDistance(attraction, visitedLocation.location),
+                                rewardsService.getRewardPoints(attraction, visitedLocation.userId)
+                        )).toList();
+
+        return closestAttractionList;
     }
 
     private void addShutDownHook() {
