@@ -31,7 +31,6 @@ public class RewardsService {
         this.rewardsCentral = rewardCentral;
     }
 
-    public void testToDelet(){};
     public void setProximityBuffer(int proximityBuffer) {
         this.proximityBuffer = proximityBuffer;
     }
