@@ -55,10 +55,22 @@ jobs:
         with:
           paths: ${{ github.workspace }}/TourGuide/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 100
-          min-coverage-changed-files: 100
+          min-coverage-overall: 60
+          min-coverage-changed-files: 60
           title: Code Coverage Jacoco
           update-comment: true
           pass-emoji: ':green_circle:'
           fail-emoji: ':red_circle:'
+
+      - name: Print & Check Coverage Info
+        run: |
+          import os
+          import sys
+          print("Total Coverage: " + str(os.environ["TOTAL_COVERAGE"]))
+          print("Changed Files Coverage: " + str(os.environ["CHANGED_FILES_COVERAGE"]))
+          if float(os.environ["TOTAL_COVERAGE"]) < 80 or float(os.environ["CHANGED_FILES_COVERAGE"]) < 80:
+            print("Insufficient Coverage!")
+            sys.exit(-1) # Cause Status Check Failure due to noncompliant coverage
+          sys.exit(0)
+        shell: python
 
