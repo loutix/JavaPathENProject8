@@ -18,7 +18,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -56,7 +55,7 @@ jobs:
           paths: ${{ github.workspace }}/TourGuide/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
-          min-coverage-changed-files: 1
+          min-coverage-changed-files: 80
           title: Code Coverage Jacoco
           update-comment: true
           pass-emoji: ':green_circle:'
@@ -67,21 +66,4 @@ jobs:
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
             echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
           
-          - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache Maven packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=loutix_JavaPathENProject8
-
+          
