@@ -37,7 +37,7 @@ jobs:
       - name: Install tripPricer library
         run: mvn install:install-file -Dfile=TourGuide/libs/TripPricer.jar -DgroupId=tripPricer -DartifactId=tripPricer -Dversion=1.0.0 -Dpackaging=jar
 
-      - name: Build with Maven
+      - name: Build with Maven / Generate Coverage Report
         run: mvn -B package --file TourGuide/pom.xml
 
       - name: Generate Jacoco report
