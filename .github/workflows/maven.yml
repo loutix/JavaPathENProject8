@@ -38,20 +38,8 @@ jobs:
         run: mvn install:install-file -Dfile=TourGuide/libs/TripPricer.jar -DgroupId=tripPricer -DartifactId=tripPricer -Dversion=1.0.0 -Dpackaging=jar
 
       - name: Build with Maven
-        run: mvn -B package --file TourGuide/pom.xml
+        run: mvn -B package --file pom.xml
 
       - name: Generate Jacoco report
         run: mvn jacoco:report --file pom.xml
 
-#      - name: Run Coverage
-#        run: |
-#          chmod +x mvnw
-#          - name: Add coverage to PR
-#            id: jacoco
-#            uses: madrapps/jacoco-report@v1.6.1
-#            with:
-#              paths: |
-#                ${{ github.workspace }}/TourGuide/target/site/jacoco/index.xml
-#              token: ${{ secrets.GITHUB_TOKEN }}
-#              min-coverage-overall: 40
-#              min-coverage-changed-files: 60
