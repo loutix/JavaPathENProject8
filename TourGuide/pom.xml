@@ -16,9 +16,9 @@
     <properties>
         <java.version>17</java.version>
         <openapi.version>2.2.0</openapi.version>
-        <jacoco.version>0.8.5</jacoco.version>
         <sonar.organization>loutix</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <jacoco.version>0.8.5</jacoco.version>
     </properties>
     <dependencies>
         <dependency>
@@ -95,20 +95,16 @@
                 <version>0.8.11</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
+                        <id>report</id>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <excludes>
-                            </excludes>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
