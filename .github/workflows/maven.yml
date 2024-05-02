@@ -43,3 +43,8 @@ jobs:
       - name: Generate Jacoco report
         run: mvn jacoco:report --file TourGuide/pom.xml
 
+      - name: Upload Report
+        uses: 'actions/upload-artifact@v2'
+        with:
+          name: jacoco-report
+          path: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
