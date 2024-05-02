@@ -40,3 +40,5 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file TourGuide/pom.xml
 
+      - name: Generate Jacoco report
+        run: mvn jacoco:report --file TourGuide/pom.xml
