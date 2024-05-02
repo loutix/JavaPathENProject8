@@ -42,3 +42,17 @@ jobs:
 
       - name: Generate Jacoco report
         run: mvn jacoco:report --file TourGuide/pom.xml
+
+      - name: Run Coverage
+        run: |
+          chmod +x mvnw
+          ./mvnw jacoco:report
+          - name: Add coverage to PR
+            id: jacoco
+            uses: madrapps/jacoco-report@v1.6.1
+            with:
+              paths: |
+                ${{ github.workspace }}/TourGuide/target/site/jacoco/index.xml
+              token: ${{ secrets.GITHUB_TOKEN }}
+              min-coverage-overall: 40
+              min-coverage-changed-files: 60
