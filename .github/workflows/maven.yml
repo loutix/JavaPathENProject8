@@ -57,7 +57,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 60
           min-coverage-changed-files: 60
-          title: Code Coverage
+          title: Code Coverage Jacoco
           update-comment: true
           pass-emoji: ':green_circle:'
           fail-emoji: ':red_circle:'
+
