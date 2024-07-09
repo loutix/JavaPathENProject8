@@ -73,7 +73,6 @@ public class TourGuideService {
 
     public List<Provider> getTripDeals(User user) {
 
-        //hypo 1
         int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
         List<Provider> providers =
                 tripPricer.getPrice(
