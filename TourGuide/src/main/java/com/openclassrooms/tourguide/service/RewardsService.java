@@ -11,9 +11,7 @@ import rewardCentral.RewardCentral;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
 
 @Service
 public class RewardsService {
@@ -43,8 +41,7 @@ public class RewardsService {
         //Make a copy of user.getVisitedLocations().
         List<VisitedLocation> userLocations = new CopyOnWriteArrayList<>(user.getVisitedLocations());
 
-            List<Attraction> attractions = gpsUtil.getAttractions();
-
+        List<Attraction> attractions = gpsUtil.getAttractions();
 
         for (VisitedLocation visitedLocation : userLocations) {
             for (Attraction attraction : attractions) {
@@ -60,11 +57,11 @@ public class RewardsService {
     }
 
     public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
-        return getDistance(attraction, location) > attractionProximityRange ? false : true;
+        return (getDistance(attraction, location) <= attractionProximityRange);
     }
 
     private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
-        return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
+        return (getDistance(attraction, visitedLocation.location) <= proximityBuffer);
     }
 
     private int getRewardPoints(Attraction attraction, User user) {

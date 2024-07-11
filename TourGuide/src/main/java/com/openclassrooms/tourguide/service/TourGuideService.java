@@ -1,6 +1,6 @@
 package com.openclassrooms.tourguide.service;
 
-import com.openclassrooms.tourguide.closestAttraction;
+import com.openclassrooms.tourguide.ClosestAttraction;
 import com.openclassrooms.tourguide.helper.InternalTestHelper;
 import com.openclassrooms.tourguide.tracker.Tracker;
 import com.openclassrooms.tourguide.user.User;
@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -30,6 +32,7 @@ public class TourGuideService {
     private final TripPricer tripPricer = new TripPricer();
     public final Tracker tracker;
     boolean testMode = true;
+    ExecutorService executorService = Executors.newCachedThreadPool();
 
     public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
         this.gpsUtil = gpsUtil;
@@ -96,22 +99,22 @@ public class TourGuideService {
             user.addToVisitedLocations(visitedLocation);
             rewardsService.calculateRewards(user);
             return visitedLocation;
-        });
+        }, executorService);
     }
 
 
-    public List<closestAttraction> getNearByAttractions(VisitedLocation visitedLocation) {
+    public List<ClosestAttraction> getNearByAttractions(VisitedLocation visitedLocation) {
 
         List<Attraction> attractionSorted = gpsUtil.getAttractions()
-                .stream()
+                .parallelStream()
                 .sorted(Comparator.comparingDouble(attraction -> rewardsService.getDistance(attraction, visitedLocation.location)))
                 .limit(5)
                 .toList();
 
-        List<closestAttraction> closestAttractionList =
+        List<ClosestAttraction> closestAttractionList =
                 attractionSorted
                         .stream()
-                        .map(attraction -> new closestAttraction(
+                        .map(attraction -> new ClosestAttraction(
                                 attraction.attractionName,
                                 new Location(attraction.latitude, attraction.longitude),
                                 visitedLocation.location,

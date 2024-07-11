@@ -108,7 +108,7 @@ public class TestTourGuideService {
         CompletableFuture<VisitedLocation> futureVisitedLocation = tourGuideService.trackUserLocation(user);
         VisitedLocation visitedLocation = futureVisitedLocation.get();
 
-        List<closestAttraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
+        List<ClosestAttraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
 
         tourGuideService.tracker.stopTracking();
 

@@ -29,7 +29,7 @@ public class TourGuideController {
     }
 
     @RequestMapping("/getNearbyAttractions")
-    public List<closestAttraction> getNearbyAttractions(@RequestParam String userName) {
+    public List<ClosestAttraction> getNearbyAttractions(@RequestParam String userName) {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
         return tourGuideService.getNearByAttractions(visitedLocation);
     }
