@@ -54,6 +54,8 @@ jobs: #jobs
           min-coverage-changed-files: 1
           title: Code Coverage Jacoco
           update-comment: true
+          pass-emoji: ':green_circle:'
+          fail-emoji: ':red_circle:'
 
 
       - name: Get the Coverage info
