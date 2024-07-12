@@ -4,6 +4,9 @@ on: #evenement
   push:
     branches: [ "master" ,"dev" ]
 
+  pull_request:
+    branches: [ "master" ,"dev" ]
+
 jobs: #jobs
   build:
 
@@ -35,4 +38,26 @@ jobs: #jobs
       - name: Generate Jacoco report
         run: mvn jacoco:report --file TourGuide/pom.xml
 
+      - name: Upload Report
+        uses: 'actions/upload-artifact@v4'
+        with:
+          name: jacoco-report
+          path: ${{ github.workspace }}/TourGuide/target/site/jacoco/jacoco.xml
 
+      - name: Jacoco Report to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: ${{ github.workspace }}/TourGuide/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 1
+          title: Code Coverage Jacoco
+          update-comment: true
+          pass-emoji: ':green_circle:'
+          fail-emoji: ':red_circle:'
+
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
