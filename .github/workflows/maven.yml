@@ -10,7 +10,7 @@ on: #evenement
 jobs: #jobs
   build:
 
-    runs-on: ubuntu-latest #contener docker VM d
+    runs-on: ubuntu-latest #contener docker
     steps:
 
       - name: Clone sources with checkout
