@@ -65,7 +65,7 @@ public class TourGuideService {
     }
 
     public List<User> getAllUsers() {
-        return internalUserMap.values().stream().collect(Collectors.toList());
+        return internalUserMap.values().parallelStream().collect(Collectors.toList());
     }
 
     public void addUser(User user) {
@@ -111,16 +111,15 @@ public class TourGuideService {
                 .limit(5)
                 .toList();
 
-        List<ClosestAttraction> closestAttractionList =
-                attractionSorted
-                        .stream()
-                        .map(attraction -> new ClosestAttraction(
-                                attraction.attractionName,
-                                new Location(attraction.latitude, attraction.longitude),
-                                visitedLocation.location,
-                                rewardsService.getDistance(attraction, visitedLocation.location),
-                                rewardsService.getRewardPoints(attraction, visitedLocation.userId)
-                        )).toList();
+        List<ClosestAttraction> closestAttractionList = attractionSorted
+                .stream()
+                .map(attraction -> new ClosestAttraction(
+                        attraction.attractionName,
+                        new Location(attraction.latitude, attraction.longitude),
+                        visitedLocation.location,
+                        rewardsService.getDistance(attraction, visitedLocation.location),
+                        rewardsService.getRewardPoints(attraction, visitedLocation.userId)
+                )).toList();
 
         return closestAttractionList;
     }

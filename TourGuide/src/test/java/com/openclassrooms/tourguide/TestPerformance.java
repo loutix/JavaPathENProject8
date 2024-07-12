@@ -66,8 +66,9 @@ public class TestPerformance {
                 .map(tourGuideService::trackUserLocation)
                 .toList();
 
+        // Boucle pour attendre que toutes les tâches asynchrones soient terminées
         for (CompletableFuture<VisitedLocation> future : futuresList) {
-            future.get();
+            future.get();// Bloque jusqu'à ce que la tâche asynchrone soit terminée
         }
 
         stopWatch.stop();
@@ -85,12 +86,12 @@ public class TestPerformance {
 
         // Users should be incremented up to 100,000, and test finishes within 20
         // minutes
-        InternalTestHelper.setInternalUserNumber(10);
+        InternalTestHelper.setInternalUserNumber(100000);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 
-        Attraction attraction = gpsUtil.getAttractions().get(0);
+        Attraction attraction = gpsUtil.getAttractions().getFirst();
         List<User> allUsers = new ArrayList<>();
         allUsers = tourGuideService.getAllUsers();
         allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
