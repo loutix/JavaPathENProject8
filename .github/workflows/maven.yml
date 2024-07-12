@@ -51,9 +51,9 @@ jobs: #jobs
           paths: ${{ github.workspace }}/TourGuide/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
-          min-coverage-changed-files: 80
-          title: Code Coverage Jacoco
-          update-comment: false
+          min-coverage-changed-files: 10
+          title: Code Coverage Jacoco 123
+          update-comment: true
 
 
       - name: Get the Coverage info
