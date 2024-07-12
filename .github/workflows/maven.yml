@@ -52,8 +52,8 @@ jobs: #jobs
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 1
-          title: Code Coverage Jacoco 123
-          #update-comment: false
+          title: Code Coverage Jacoco
+          update-comment: true
 
 
       - name: Get the Coverage info
