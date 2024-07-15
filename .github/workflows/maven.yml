@@ -52,7 +52,7 @@ jobs: #jobs
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 1
-          title: Code Coverage Jacoco Test-1
+          title: Code Coverage Jacoco
           update-comment: false
 
 
