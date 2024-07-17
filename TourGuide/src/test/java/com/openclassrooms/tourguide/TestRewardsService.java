@@ -58,7 +58,7 @@ public class TestRewardsService {
         TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 
         User user = tourGuideService.getAllUsers().getFirst();
-
+        // erreur de concurrence
         rewardsService.calculateRewards(user);
         List<UserReward> userRewards = tourGuideService.getUserRewards(user);
         tourGuideService.tracker.stopTracking();
