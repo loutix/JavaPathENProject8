@@ -66,6 +66,11 @@ jobs: #jobs
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
           echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
 
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests package --file TourGuide/pom.xml
+
+
       - name: Package the application
         run: |
           mkdir -p staging
