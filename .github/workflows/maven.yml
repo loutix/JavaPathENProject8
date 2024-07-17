@@ -2,10 +2,10 @@ name: Java CI with Maven P8_OCR
 
 on: #evenement
   push:
-    branches: [ "master" ,"dev", "workflow_github" ]
+    branches: [ "master" ,"dev" ]
 
   pull_request:
-    branches: [ "master" ,"dev", "workflow_github" ]
+    branches: [ "master" ,"dev" ]
 
 jobs: #jobs
   build:
@@ -32,8 +32,14 @@ jobs: #jobs
       - name: Install tripPricer library
         run: mvn install:install-file -Dfile=TourGuide/libs/TripPricer.jar -DgroupId=tripPricer -DartifactId=tripPricer -Dversion=1.0.0 -Dpackaging=jar
 
-      - name: Build and Test with Maven
-        run: mvn -B --update-snapshots verify --file TourGuide/pom.xml
+#      - name: Build and Test with Maven
+#        run: mvn -B --update-snapshots verify --file TourGuide/pom.xml
+
+      - name: Compile with Maven
+        run: mvn -B compile --file TourGuide/pom.xml
+
+      - name: Test with Maven
+        run: mvn -B test --file TourGuide/pom.xml
 
       - name: Generate Jacoco report
         run: mvn jacoco:report --file TourGuide/pom.xml
@@ -60,6 +66,11 @@ jobs: #jobs
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
           echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
 
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests package --file TourGuide/pom.xml
+
+
       - name: Package the application
         run: |
           mkdir -p staging
@@ -70,3 +81,5 @@ jobs: #jobs
         with:
           name: package
           path: staging
+
+          ###
