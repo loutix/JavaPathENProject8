@@ -2,11 +2,9 @@ name: Java CI with Maven P8_OCR
 
 on: #evenement
   push:
-    branches: [ "master" ,"dev"]
     branches: [ "master" ,"dev", "workflow_github" ]
 
   pull_request:
-    branches: [ "master" ,"dev"]
     branches: [ "master" ,"dev", "workflow_github" ]
 
 jobs: #jobs
